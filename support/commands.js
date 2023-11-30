@@ -23,3 +23,48 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+
+
+// Cypress.Commands.add('addItems', (phoneName) => {
+
+
+
+//         cy.get('h4.card-title').each(($el,index,list)=>{
+//             switch (phoneName) {
+//                 case phoneName:
+//                     if($el.text().includes(phoneName)){
+//                         cy.get('button.btn.btn-info').eq(index).click()
+//                     }
+//                     break;
+//                     case phoneName:
+//                         if($el.text().includes(phoneName)){
+//                             cy.get('button.btn.btn-info').eq(index).click()
+//                         }
+//                     break;
+//                     case phoneName:
+//                         if($el.text().includes(phoneName)){
+//                             cy.get('button.btn.btn-info').eq(index).click()
+//                         }
+//                     break;
+//                 default:
+//                     cy.log(`Phone name "${phoneName}" not found in the fixture data.`);
+//             }
+
+//           })
+
+
+//         })
+
+
+
+Cypress.Commands.add('addItems', (phoneName) => {
+
+    cy.get('h4.card-title').each(($el, index, list) => {
+
+        if($el.text().includes(phoneName)){
+            cy.get('button.btn.btn-info').eq(index).click() 
+        }
+
+    })
+})
