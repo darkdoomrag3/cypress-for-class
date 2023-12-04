@@ -1,3 +1,4 @@
+import ProductPage from '../e2e/PageObject/ProductPage'
 
 describe('template spec', () => {
   beforeEach(function () {
@@ -10,9 +11,12 @@ describe('template spec', () => {
 
 
   it.only('check validation', function () {
+   const productPage= new ProductPage()
     cy.visit('https://rahulshettyacademy.com/angularpractice/shop');
 
     this.data.phoneName.forEach((element) => cy.addItems(element));
+    productPage.getCheckOut().click()
+    productPage.totalProductCount()
 
   }
   )
