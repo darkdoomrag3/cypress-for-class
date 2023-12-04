@@ -23,24 +23,7 @@ class ProductPage {
 
         })
 
-        // // Retrieve the total sum of the basket
-        // cy.get('h3 > strong').invoke('text').then((basketTotal) => {
-        //     // Collect individual item prices and calculate their sum
-        //     cy.get('tbody > tr').each(($el) => {
-        //         cy.wrap($el).find('td:nth-child(4)').then(($price) => {
-        //             const numericPrice = parseInt($price.text().replace('₹.', ''));
-        //             if (!isNaN(numericPrice)) {
-        //                 totalSum += numericPrice;
-        //             }
-        //         });
-        //     }).then(() => {
-        //         // Format totalSum for comparison
-        //         const formattedTotalSum = totalSum;
-        //         const formattedTotalBasket = basketTotal
-        //         // Compare the individual item sum with the total basket sum
-        //         expect(formattedTotalSum).to.equal(formattedTotalBasket.toString());
-        //     });
-        // });
+  
     }
 
 

@@ -20,6 +20,7 @@ describe('template spec', () => {
     homepage.getCheckBoxAfterForm().check()
     homepage.getGender().select(this.data.gender)
     homepage.getCheckBox().check('option2')
+    cy.get(':nth-child(2) > .nav-link').click()
 
   })
 
