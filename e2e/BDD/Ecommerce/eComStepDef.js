@@ -1,8 +1,8 @@
 import { When,Given,Then,Step ,Before, BeforeStep, After, AfterStep,And } from "@badeball/cypress-cucumber-preprocessor";
 import HomePage from '../../PageObject/HomePage'
 import ProductPage from '../../PageObject/ProductPage'
-     const homepage= new HomePage();
-     const productPage = new ProductPage()    
+    
+        
 
 
 Given("I open Ecomemrce page",()=>{
@@ -10,7 +10,8 @@ Given("I open Ecomemrce page",()=>{
     cy.visit('https://rahulshettyacademy.com/angularpractice/');
 })
 
-When("I add items to Cart",()=>{
+When("I add items to Cart",function(){
+    const homepage= new HomePage();
     homepage.getNameInForm().type(this.data.name)
     homepage.getEmailFrom().type(this.data.email)
     homepage.getPasswordForm().type(this.data.password)
@@ -20,10 +21,14 @@ When("I add items to Cart",()=>{
     cy.get(':nth-child(2) > .nav-link').click()
 })
 
-When("Validate the total prices",()=>{
+When("Validate the total prices",function(){
+    const productPage = new ProductPage() 
+    
+    this.data.phoneName.forEach((element) => cy.addItems(element));
+    productPage.getCheckOut().click()
     productPage.totalProductCount()
     cy.get(':nth-child(5) > :nth-child(5) > .btn').click()
-   
+
   
 })
 

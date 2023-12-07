@@ -1,7 +1,5 @@
 beforeEach(function () {
-    const self = this;
-    cy.fixture('example').then(function (data) {
-      self.data = data;
-    });
+  cy.fixture('example').then(function (data) {
+   return this.data = data;
   });
-  
+});
