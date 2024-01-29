@@ -26,15 +26,6 @@ cy.contains('PROCEED TO CHECKOUT').click()
 //cy.contains('Place Order').click()
 
 
-
-
-
-
-
-
-
-
-
 //fixture
 
 }  )
