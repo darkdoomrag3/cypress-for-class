@@ -128,28 +128,28 @@ describe('Validate Form', () => {
         cy.get('[type="checkbox"]').check({ force: true })
     })
 
-    it.only('Date Picker automate', () => {
-      
-  
+    it('Date Picker automate', () => {
+
+
         function DatePicker() {
             const currentDate = new Date();
             const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        
+
             // Get the date for tomorrow
             const tomorrowDate = new Date(currentDate);
             tomorrowDate.setDate(currentDate.getDate() + 1);
             const formattedTomorrowDate = tomorrowDate.toLocaleDateString('en-US', options);
-        
+
             // Get the date for next week
             const nextWeekDate = new Date(currentDate);
             nextWeekDate.setDate(currentDate.getDate() + 7);
             const formattedNextWeekDate = nextWeekDate.toLocaleDateString('en-US', options);
-        
+
             // Get the date for next month
             const nextMonthDate = new Date(currentDate);
             nextMonthDate.setMonth(currentDate.getMonth() + 1);
             const formattedNextMonthDate = nextMonthDate.toLocaleDateString('en-US', options);
-        
+
             return {
                 tomorrow: formattedTomorrowDate,
                 nextWeek: formattedNextWeekDate,
@@ -161,14 +161,48 @@ describe('Validate Form', () => {
         cy.contains('Forms').click();
         cy.contains('Datepicker').click();
         const formattedDates = DatePicker();
-        cy.contains('nb-card', 'Common Datepicker').get('[placeholder="Form Picker"]').type(formattedDates.tomorrow).click();
+        cy.contains('nb-card', 'Common Datepicker').get('[placeholder="Form Picker"]').type(formattedDates.nextMonth).click();
+
+
         // cy.get(`[ng-reflect-selected-value="${formattedDates.nextWeek}"]`).click({force: true})
         cy.get('[class="day-cell selected ng-star-inserted"]').invoke('text').then(dateValue => {
             cy.wrap(dateValue)
-       
+
             cy.get('.selected').click()
         })
-      
+
+    })
+
+    it.only('Dropdown', () => {
+
+        cy.visit('http://localhost:4200/');
+
+        cy.get('nav nb-select').click();
+        //1
+        cy.get('[ng-reflect-klass="select-button"]').each(() => {
+            const colors = ['Dark', 'Cosmic', 'Light', 'Corporate'];
+
+            for (let i = 0; i < colors.length; i++) {
+
+                cy.contains(colors[i]).click();
+                cy.get('.select-button').click();
+            }
+        })
+
+        //2
+        cy.get('nav nb-select').then(dropdown => {
+            cy.wrap(dropdown).click();
+            cy.get('[ng-reflect-klass="select-button"]').each((ListItem, index) => {
+                const itemText = ListItem.text().trim();
+                cy.wrap(ListItem).click();
+                cy.wrap(dropdown).should('contain', itemText);
+                if (index < 3) {
+                    cy.wrap(dropdown).click();
+                }
+
+            })
+        })
+
     })
 
 })
