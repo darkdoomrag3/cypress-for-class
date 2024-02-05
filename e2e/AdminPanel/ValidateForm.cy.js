@@ -173,7 +173,7 @@ describe('Validate Form', () => {
 
     })
 
-    it.only('Dropdown', () => {
+    it('Dropdown', () => {
 
         cy.visit('http://localhost:4200/');
 
@@ -204,5 +204,41 @@ describe('Validate Form', () => {
         })
 
     })
+
+    it.only('Smart Tabel', () => {
+
+        cy.visit('http://localhost:4200/');
+        cy.contains('Tables & Data').click();
+        cy.contains('Smart Table').click();
+       
+       //Get the row by text
+        cy.get('tbody').contains('tr','Larry').then((tabelRow)=>{
+            cy.wrap(tabelRow).find('.nb-edit').click();
+            cy.wrap(tabelRow).find('[placeholder="Age"]').clear().type('33')
+            cy.wrap(tabelRow).find('.nb-checkmark').click();
+            cy.wrap(tabelRow).find('td').eq(6).should('contain','33')
+      
+        })
+
+        //Get the row by index
+        cy.get('thead').find('.nb-plus').click();
+        cy.get('thead').find('tr').eq(2).then((tabelRow) => {
+            cy.wrap(tabelRow).find('[placeholder="First Name"]').type('Emad')
+            cy.wrap(tabelRow).find('[placeholder="Last Name"]').type('Deym')
+            cy.wrap(tabelRow).find('[placeholder="Username"]').type('Emad')
+            cy.wrap(tabelRow).find('[placeholder="E-mail"]').type('Emad@gmail.com')
+            cy.wrap(tabelRow).find('[placeholder="Age"]').type('33')
+            cy.wrap(tabelRow).find('.nb-checkmark').click();
+            cy.wrap(tabelRow).get('tbody > :nth-child(1) > :nth-child(7)').should('contain', '33')
+            cy.get('tbody tr').first().find('td').then(tableColumn=>{
+                cy.wrap(tableColumn).eq(2).should('contain','Emad')
+                cy.wrap(tableColumn).eq(3).should('contain','Deym')
+            })
+
+
+        })
+    })
+
+
 
 })
