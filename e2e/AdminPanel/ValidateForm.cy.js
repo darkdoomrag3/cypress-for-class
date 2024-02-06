@@ -205,19 +205,19 @@ describe('Validate Form', () => {
 
     })
 
-    it.only('Smart Tabel', () => {
+    it('Smart Tabel', () => {
 
         cy.visit('http://localhost:4200/');
         cy.contains('Tables & Data').click();
         cy.contains('Smart Table').click();
-       
-       //Get the row by text
-        cy.get('tbody').contains('tr','Larry').then((tabelRow)=>{
+
+        //Get the row by text
+        cy.get('tbody').contains('tr', 'Larry').then((tabelRow) => {
             cy.wrap(tabelRow).find('.nb-edit').click();
             cy.wrap(tabelRow).find('[placeholder="Age"]').clear().type('33')
             cy.wrap(tabelRow).find('.nb-checkmark').click();
-            cy.wrap(tabelRow).find('td').eq(6).should('contain','33')
-      
+            cy.wrap(tabelRow).find('td').eq(6).should('contain', '33')
+
         })
 
         //Get the row by index
@@ -230,15 +230,73 @@ describe('Validate Form', () => {
             cy.wrap(tabelRow).find('[placeholder="Age"]').type('33')
             cy.wrap(tabelRow).find('.nb-checkmark').click();
             cy.wrap(tabelRow).get('tbody > :nth-child(1) > :nth-child(7)').should('contain', '33')
-            cy.get('tbody tr').first().find('td').then(tableColumn=>{
-                cy.wrap(tableColumn).eq(2).should('contain','Emad')
-                cy.wrap(tableColumn).eq(3).should('contain','Deym')
+            cy.get('tbody tr').first().find('td').then(tableColumn => {
+                cy.wrap(tableColumn).eq(2).should('contain', 'Emad')
+                cy.wrap(tableColumn).eq(3).should('contain', 'Deym')
             })
 
 
         })
+
+        //assertion on age
+        const ages = ['20', '30', '40', '50', '60', '70', '200']
+
+
+
+        for (let i = 0; i < ages.length; i++) {
+            cy.get('thead [placeholder="Age"]').clear().type(ages[i])
+            cy.wait(500)
+        }
+
+        cy.wait(500)
+        cy.get('thead [placeholder="Age"]').clear().type('20')
+        cy.get('tbody tr').each((row) => {
+            cy.wrap(row).find('td:last').then(td => {
+                const age = td.textContent
+                cy.log(age)
+                cy.wrap(td).should('contain', '20')
+
+            })
+        })
+
+        //another way of doing this 
+        cy.get('tbody tr').each(tableRow => {
+            cy.wrap(tableRow).find('td').eq(6).should('contain', '20')
+        })
+
     })
 
+    it.only('Loop through table', () => {
+
+        cy.visit('http://localhost:4200/');
+        cy.contains('Tables & Data').click();
+        cy.contains('Smart Table').click();
+        //assertion on age
+        const ages = [20,30,40,200]
+
+
+
+        for (let i = 0; i < ages.length; i++) {
+            cy.get('thead [placeholder="Age"]').clear().type(ages[i])
+            cy.wait(500)
+            
+        }
+
+        //another way of doing loop
+        cy.wrap(ages).each(age => {
+            cy.get('thead [placeholder="Age"]').clear().type(age)
+            cy.wait(500)
+            cy.get('tbody tr').each(tabelRow=>{
+                if(age ==200){
+                    cy.wrap(tabelRow).should('contain', 'No data found')
+                } else{
+                    cy.wrap(tabelRow).find('td').eq(6).should('contain', age)
+                }
+              
+            })
+        })
+
+    })
 
 
 })
