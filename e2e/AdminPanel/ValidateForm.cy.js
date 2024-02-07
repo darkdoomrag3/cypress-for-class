@@ -266,37 +266,74 @@ describe('Validate Form', () => {
 
     })
 
-    it.only('Loop through table', () => {
+    it('Loop through table', () => {
 
         cy.visit('http://localhost:4200/');
         cy.contains('Tables & Data').click();
         cy.contains('Smart Table').click();
         //assertion on age
-        const ages = [20,30,40,200]
-
-
+        const ages = [20, 30, 40, 200]
 
         for (let i = 0; i < ages.length; i++) {
             cy.get('thead [placeholder="Age"]').clear().type(ages[i])
             cy.wait(500)
-            
+
         }
 
         //another way of doing loop
         cy.wrap(ages).each(age => {
             cy.get('thead [placeholder="Age"]').clear().type(age)
             cy.wait(500)
-            cy.get('tbody tr').each(tabelRow=>{
-                if(age ==200){
+            cy.get('tbody tr').each(tabelRow => {
+                if (age == 200) {
                     cy.wrap(tabelRow).should('contain', 'No data found')
-                } else{
+                } else {
                     cy.wrap(tabelRow).find('td').eq(6).should('contain', age)
                 }
-              
+
             })
         })
 
     })
+
+    it.only('Tooltip and Alert', () => {
+
+        cy.visit('http://localhost:4200/');
+        cy.contains('Modal & Overlays').click();
+        cy.contains('Tooltip').click();
+        cy.contains('nb-card', 'Colored Tooltips').contains('Default').click();
+        cy.get('.top').should('contain', 'This is a tooltip')
+        cy.contains('Tables & Data').click();
+        cy.contains('Smart Table').click();
+        // cy.get('tbody tr').eq(0).find('.nb-trash').click();
+        // //first method(not suggested)
+        // cy.on('window:alert', (alertText) => {
+        //     //assertions
+        //     expect(alertText).to.contains('Are you sure you want to delete?');
+        // })
+
+        //2 method
+        const stub = cy.stub()
+
+        cy.on('window:confirm', stub)
+
+        cy.get('tbody tr').eq(0).find('.nb-trash')
+            .click()
+            .then(() => {
+                expect(stub.getCall(0)).to.be.calledWith('Are you sure you want to delete?')
+
+            })
+
+        //cancel confrimation
+        // const stub = cy.stub()
+
+        // cy.get('tbody tr').eq(0).find('.nb-trash')
+        //     .click()
+           
+        //     cy.on('window:confirm', ()=>false)
+    
+    })
+
 
 
 })
