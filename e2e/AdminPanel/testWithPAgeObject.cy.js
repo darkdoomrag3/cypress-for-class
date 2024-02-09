@@ -1,4 +1,7 @@
 /// <reference types="cypress" />
+import Navigation from "./AdminPanelPageObject/menuePage";
+import DynamicDatePicker from "./AdminPanelPageObject/datePickerFunction";
+import FormsLayoutPage from "./AdminPanelPageObject/formsLayoutPage";
 
 
 beforeEach(() => {
@@ -9,7 +12,7 @@ beforeEach(() => {
 describe('Validate Form', () => {
 
     it('validate Email', () => {
-        cy.visit('http://localhost:4200/');
+        cy.visit('/');
       
         cy.contains('Forms').click();
         cy.contains('Form Layouts').click();
@@ -17,10 +20,11 @@ describe('Validate Form', () => {
 
     })
 
-    it.only('Tehory behind cypress for interact with DOM and element for students', () => {
+    it('Tehory behind cypress for interact with DOM and element for students', () => {
         cy.visit('/');
-        cy.contains('Forms').click();
-        cy.contains('Form Layouts').click();
+        const formPage=new Navigation();
+        formPage.navigateToForms();
+        
         
         //by Tag name    
         cy.get('input');
@@ -57,9 +61,9 @@ describe('Validate Form', () => {
     })
 
     it('Saving subject of the command', () => {
-        cy.visit('http://localhost:4200/');
-        cy.contains('Forms').click();
-        cy.contains('Form Layouts').click();
+        cy.visit('/');
+        const formPage=new Navigation();
+        formPage.navigateToForms();
         cy.get('nb-card').find('[for="inputEmail1"]').should('contain', 'Email');
 
         // this is not correct since cypress is asynchronous and it has his own method to assign variable 
@@ -79,9 +83,9 @@ describe('Validate Form', () => {
     })
 
     it('Extract Text', () => {
-        cy.visit('http://localhost:4200/');
-        cy.contains('Forms').click();
-        cy.contains('Form Layouts').click();
+        cy.visit('/');
+        const formPage=new Navigation();
+        formPage.navigateToForms();
 
         //1 
         cy.get('[for="exampleInputEmail1"]').should('contain', 'Email address')
@@ -114,9 +118,9 @@ describe('Validate Form', () => {
 
     })
     it('Radio button', () => {
-        cy.visit('http://localhost:4200/');
-        cy.contains('Forms').click();
-        cy.contains('Form Layouts').click();
+        cy.visit('/');
+        const formPage=new Navigation();
+        formPage.navigateToForms();
         cy.contains('nb-card', 'Using the Grid').find('[type="radio"]').then(radioButton => {
             cy.wrap(radioButton).eq(1).click({ force: true })
             cy.wrap(radioButton).eq(0).should('not.be.checked')
@@ -124,46 +128,23 @@ describe('Validate Form', () => {
     })
 
     it('Check Box', () => {
-        cy.visit('http://localhost:4200/');
-        cy.contains('Modal & Overlays').click();
-        cy.contains('Toastr').click();
+        cy.visit('/');
+        const formPage=new Navigation();
+        formPage.navigateToModal();
         cy.get('[type="checkbox"]').check({ force: true })
     })
 
     it('Date Picker automate', () => {
 
+       const dynamicDatePicker  = new DynamicDatePicker()
+       const { tomorrow, nextWeek, nextMonth } = dynamicDatePicker.DatePicker();
 
-        function DatePicker() {
-            const currentDate = new Date();
-            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        cy.visit('/');
+        const formPage=new Navigation();
+        formPage.navigateToDatePicker();
 
-            // Get the date for tomorrow
-            const tomorrowDate = new Date(currentDate);
-            tomorrowDate.setDate(currentDate.getDate() + 1);
-            const formattedTomorrowDate = tomorrowDate.toLocaleDateString('en-US', options);
-
-            // Get the date for next week
-            const nextWeekDate = new Date(currentDate);
-            nextWeekDate.setDate(currentDate.getDate() + 7);
-            const formattedNextWeekDate = nextWeekDate.toLocaleDateString('en-US', options);
-
-            // Get the date for next month
-            const nextMonthDate = new Date(currentDate);
-            nextMonthDate.setMonth(currentDate.getMonth() + 1);
-            const formattedNextMonthDate = nextMonthDate.toLocaleDateString('en-US', options);
-
-            return {
-                tomorrow: formattedTomorrowDate,
-                nextWeek: formattedNextWeekDate,
-                nextMonth: formattedNextMonthDate
-            };
-        }
-
-        cy.visit('http://localhost:4200/');
-        cy.contains('Forms').click();
-        cy.contains('Datepicker').click();
-        const formattedDates = DatePicker();
-        cy.contains('nb-card', 'Common Datepicker').get('[placeholder="Form Picker"]').type(formattedDates.nextMonth).click();
+        
+        cy.contains('nb-card', 'Common Datepicker').get('[placeholder="Form Picker"]').type(tomorrow).click();
 
 
         // cy.get(`[ng-reflect-selected-value="${formattedDates.nextWeek}"]`).click({force: true})
@@ -177,7 +158,7 @@ describe('Validate Form', () => {
 
     it('Dropdown', () => {
 
-        cy.visit('http://localhost:4200/');
+        cy.visit('/');
 
         cy.get('nav nb-select').click();
         //1
@@ -209,9 +190,9 @@ describe('Validate Form', () => {
 
     it('Smart Tabel', () => {
 
-        cy.visit('http://localhost:4200/');
-        cy.contains('Tables & Data').click();
-        cy.contains('Smart Table').click();
+        cy.visit('/');
+        const formPage=new Navigation();
+        formPage.navigateToTable();
 
         //Get the row by text
         cy.get('tbody').contains('tr', 'Larry').then((tabelRow) => {
@@ -270,9 +251,9 @@ describe('Validate Form', () => {
 
     it('Loop through table', () => {
 
-        cy.visit('http://localhost:4200/');
-        cy.contains('Tables & Data').click();
-        cy.contains('Smart Table').click();
+        cy.visit('/');
+        const formPage=new Navigation();
+        formPage.navigateToTable();
         //assertion on age
         const ages = [20, 30, 40, 200]
 
@@ -300,9 +281,9 @@ describe('Validate Form', () => {
 
     it('Tooltip and Alert', () => {
 
-        cy.visit('http://localhost:4200/');
-        cy.contains('Modal & Overlays').click();
-        cy.contains('Tooltip').click();
+        cy.visit('/');
+        const formPage=new Navigation();
+        formPage.navigateToTooltip();
         cy.contains('nb-card', 'Colored Tooltips').contains('Default').click();
         cy.get('.top').should('contain', 'This is a tooltip')
         cy.contains('Tables & Data').click();
@@ -336,6 +317,18 @@ describe('Validate Form', () => {
     
     })
 
+    it.only('Form With Page Object', () => {
 
+        cy.visit('/');
+        const formPage=new Navigation();
+        formPage.navigateToForms();
+        const fillForm= new FormsLayoutPage();
+        fillForm.submitInlineFormWithName('Emad','test@test.com')
+        fillForm.submitBasaicForm('test@test.com','123456')
+        formPage.navigateToDatePicker();
+        cy.wait(500)
+        const rangeDatePicker = new DynamicDatePicker();
+        rangeDatePicker.SelectDatePickerWithrange(7,14)
+    })
 
 })
