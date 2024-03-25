@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 beforeEach(() => {
-
+    cy.openHomePage()
     cy.viewport(1280, 720)
 })
 
